@@ -10,13 +10,13 @@ get "/contacts" do
   erb :contacts
 end
 
-get "/contacts/1" do
-	@contact = Contact.find(1)
-	erb :show_contact
-end
-
 get "/contacts/new" do
   erb :new_contact
+end
+
+get "/contacts/:id" do
+	@contact = Contact.find(params[:id].to_i)
+	erb :show_contact
 end
 
 post "/contacts" do
