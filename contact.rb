@@ -21,6 +21,10 @@ class Contact
     @@contacts << new_contact
   end
 
+  def remove
+    @@contacts.delete_if { |contact| contact.id == self.id }
+  end
+     
   def self.all
     @@contacts
   end
