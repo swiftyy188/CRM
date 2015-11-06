@@ -16,7 +16,16 @@ end
 
 get "/contacts/:id" do
 	@contact = Contact.find(params[:id].to_i)
-	erb :show_contact
+	if @contact
+		@contact.first_name = params[:first_name]
+		@contact.last_name = params [:last_name]
+		@contact.email = params[:email]
+		@contact.note = params [:note]
+
+		redirect to("/contact")
+	else
+		raise Sinatra::NotFound
+	end
 end
 
 get "/contacts/:id/edit" do
