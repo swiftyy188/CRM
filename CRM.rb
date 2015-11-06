@@ -1,6 +1,6 @@
 require_relative 'contact'
 require 'sinatra'
-Contact.create("johnny", "Bravo", "johnny@bitmakerlabs.com"," abc")
+
 get "/" do
   @crm_app_name = "My CRM"
   erb :index
@@ -32,6 +32,15 @@ get "/contacts/:id/edit" do
 	@contact = Contact.find(params[:id].to_i)
 	if @contact
 		erb :edit_contact
+	else
+		raise Sinatra::NotFound
+	end
+end
+
+get "/contacts/:id/delete" do
+	@contact = Contact.find(params[:id].to_i)
+	if @contact
+		erb :show_contact
 	else
 		raise Sinatra::NotFound
 	end
