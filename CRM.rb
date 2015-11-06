@@ -1,5 +1,8 @@
 require_relative 'contact'
 require 'sinatra'
+require 'data_mapper'
+
+DataMapper.setup(:default, "sqlite3:database.sqlite3")
 
 get "/" do
   @crm_app_name = "My CRM"
