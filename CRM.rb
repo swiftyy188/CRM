@@ -1,8 +1,19 @@
-require_relative 'contact'
 require 'sinatra'
 require 'data_mapper'
 
 DataMapper.setup(:default, "sqlite3:database.sqlite3")
+
+class Contact
+	include DataMapper::Resource
+   
+   property :id, Serial
+   property :first_name, String
+   property :last_name, String
+   property :email, String
+   property :notes, Text
+end
+
+DataMapper.auto_upgrade!
 
 get "/" do
   @crm_app_name = "My CRM"
@@ -23,7 +34,7 @@ get "/contacts/:id" do
 		@contact.first_name = params[:first_name]
 		@contact.last_name = params [:last_name]
 		@contact.email = params[:email]
-		@contact.note = params [:note]
+		@contact.notes = params [:notes]
 
 		redirect to("/contact")
 	else
@@ -32,7 +43,7 @@ get "/contacts/:id" do
 end
 
 get "/contacts/:id/edit" do
-	@contact = Contact.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
 		erb :edit_contact
 	else
@@ -41,7 +52,7 @@ get "/contacts/:id/edit" do
 end
 
 get "/contacts/:id/delete" do
-	@contact = Contact.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
 		erb :show_contact
 	else
@@ -50,7 +61,7 @@ get "/contacts/:id/delete" do
 end
 
 delete "/contacts/:id" do
-	@contact = Contact.find(params[:id].to_i)
+	@contact = Contact.get(params[:id].to_i)
 	if @contact
 		@contact.remove
 		redirect to("/contacts")
@@ -60,6 +71,11 @@ delete "/contacts/:id" do
 end
 
 post "/contacts" do
-  Contact.create(params[:first_name], params[:last_name], params[:email], params[:note])
-  redirect to('/contacts')
+ 	contact = Contact.create(
+ 		:first_name => params[:first_name],
+ 		:last_name => params[:last_name],
+ 		:email => params[:email],
+ 		:notes => params[:notes]
+ 		)
+ 	redirect to('/contacts')
 end
